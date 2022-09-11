@@ -1,44 +1,1 @@
-from pygame import *
-import time as t
-
-init()
-win = display.set_mode((800,800))
-
-
-class Object:
-    def __init__(self, x,y, win):
-        self.x = x
-        self.y = y
-        self.win = win
-    def draw(self):
-        draw.rect(self.win, (0, 0, 0), (self.x, self.y, 5, 5))
-
-
-
-Objects = []
-
-while True:
-    m = mouse.get_pos()
-    win.fill((255,255,255))
-
-
-
-    for i in event.get():
-        if i.type == QUIT:
-            exit()
-        if i.type == MOUSEBUTTONDOWN:
-            if BUTTON_LEFT:
-                clicked = 1
-        if i.type == MOUSEBUTTONUP:
-            clicked = 0
-
-    xx = round(m[0]/5)*5-2.5
-    yy = round(m[1]/5)*5-2.5
-
-    draw.rect(win, (0,0,0), (round(m[0]/5)*5-2.5,round(m[1]/5)*5-2.5, 5,5), 1)
-    if mouse.get_pressed()[0]:
-        Objects.append(Object(xx, yy, win))
-    for obj in Objects:
-        obj.draw()
-
-    display.flip()
+from pygame import *import time as timport osos.chdir(os.path.dirname(os.path.abspath(__file__)))PixelsS = []Pixels = []sfile = open("MyFile.mpi", 'w+', encoding='utf-8')def fileSave():    sfile.write(''.join(str(PixelsS)))    print(str(PixelsS))p = image.load("pencil.png")p = transform.smoothscale(p, (25,25))e = image.load("earser.png")e = transform.smoothscale(e, (25,25))pencil = 1clicked = 0size = 10r,g,b = 40,0,50init()win = display.set_mode((800,800))class Pixel:    def __init__(self, x,y, win, size,r,g,b, is_earser):        self.x = x        self.y = y        self.win = win        self.size = size        self.is_earser = is_earser        self.r,self.g,self.b = r,g,b    def draw(self):        if self.is_earser: draw.rect(self.win, (255,255,255), (self.x, self.y, self.size, self.size))        else: draw.rect(self.win, (self.r, self.g, self.b), (self.x, self.y, self.size, self.size))while True:    m = mouse.get_pos()    win.fill((235,235,235))    draw.rect(win, (255, 255, 255), (15, 15, 770, 700))    for i in event.get():        if i.type == QUIT:            exit()        if i.type == MOUSEBUTTONDOWN:            if BUTTON_LEFT:                clicked = 1        if i.type == MOUSEBUTTONUP:            clicked = 0    xx = round(m[0]/size)*size-size/2    yy = round(m[1]/size)*size-size/2    draw.rect(win, (200,200,200), (15,730, 770,60), 5, 20)    for pix in Pixels:        pix.draw()    if m[0] >= 25 and m[0] <= 65 and m[1] >= 740 and m[1] <= 780:        draw.rect(win, (220, 220, 220), (25, 740, 40, 40), 100, 10)        if clicked:            clicked = 0            pencil = 1    if m[0] >= 25+50 and m[0] <= 65+50 and m[1] >= 740 and m[1] <= 780:        draw.rect(win, (220, 220, 220), (25+50, 740, 40, 40), 100, 10)        if clicked:            clicked = 0            pencil = 0    if m[0] >= 25+710 and m[0] <= 65+710 and m[1] >= 740 and m[1] <= 780:        draw.rect(win, (220, 220, 220), (25+710, 740, 40, 40), 100, 10)        if clicked:            clicked = 0            fileSave()    if pencil == 1:        draw.rect(win, (190, 190, 190), (25, 740, 40, 40), 100, 10)    if pencil == 0:        draw.rect(win, (190, 190, 190), (25+50, 740, 40, 40), 100, 10)    draw.rect(win, (100, 100, 100), (25, 740, 40, 40), 3, 10)    draw.rect(win, (100, 100, 100), (25+50, 740, 40, 40), 3, 10)    draw.rect(win, (100, 100, 100), (25 + 710, 740, 40, 40), 3, 10)    if yy >= 15 and yy <= 710 and xx >= 15 and xx <= 775:        draw.rect(win, (0, 0, 0), (round(m[0] / size) * size - size / 2, round(m[1] / size) * size - size / 2, size, size), 1)        mouse.set_visible(False)        draw.rect(win, (255, 255, 255), (round(m[0] / size) * size - size / 2 + 1, round(m[1] / size) * size - size / 2 + 1, size - 2, size - 2), 1)        if mouse.get_pressed()[0]:            Pixels.append(Pixel(xx, yy, win, size, r,g,b, -pencil+1))            #PixelsS.append(xx, yy, win, size, r, g, b, -pencil + 1)            PixelsS.append(xx)            PixelsS.append(yy)            PixelsS.append(size)            PixelsS.append(r)            PixelsS.append(g)            PixelsS.append(b)            PixelsS.append(-pencil + 1)            PixelsS.append("\n")    else:        mouse.set_visible(True)    win.blit(p, (33,747))    win.blit(e, (33+50, 747))    display.flip()
